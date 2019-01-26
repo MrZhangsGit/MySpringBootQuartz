@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="my.springboot.quartz.dao.IQuartzTaskInfoDao">
+    <resultMap id="QuartzTaskInfoResultMap" type="my.springboot.quartz.po.QuartzTaskInfoPO">
+        <result column="id" property="id"/>
+        <result column="version" property="version"/>
+        <result column="task_no" property="taskNo"/>
+        <result column="task_name" property="taskName"/>
+        <result column="task_rule" property="taskRule"/>
+        <result column="task_state" property="taskState"/>
+        <result column="description" property="description"/>
+        <result column="frozen_time" property="frozenTime"/>
+        <result column="unfrozen_time" property="unfrozenTime"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="getTasks" parameterType="java.lang.Integer" resultMap="QuartzTaskInfoResultMap">
+        SELECT * FROM quartz_task_info
+        WHERE status = #{status}
+    </select>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="QuartzTaskInfoResultMap">
+        SELECT * FROM quartz_task_info
+        WHERE status = '${@my.springboot.quartz.enumerate.DataStatusEnum@DATA_STATUS_ENABLE.getStatusCode()}'
+        AND task_no = #{taskNo} Limit 1
+    </select>
+
+    <insert id="add" parameterType="my.springboot.quartz.po.QuartzTaskInfoPO">
+        INSERT INTO quartz_task_info
+        (id, version, task_no, task_name, task_rule, task_state, description, frozen_time, unfrozen_time, status,
+        create_time, update_time)
+        VALUES
+        (#{id}, #{version}, #{taskNo}, #{taskName}, #{taskRule}, #{taskState}, #{description}, #{frozenTime},
+        #{unfrozenTime}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+</mapper>
